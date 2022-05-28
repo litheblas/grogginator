@@ -12,7 +12,7 @@ function App() {
   const skit = ["god", "äcklig", "nasty", "vatten", "trevlig", "juice"];
   const text = ["våga dö", "inget tjaffs", "fisk", "billig"];
 
-  const functions = [colorTaste, thingAdjective, skitDrink, testDrink, nobodyRemeber];
+  const functions = [colorTaste, thingAdjective, skitDrink, textDrink, nobodyRemeber];
 
   const [drinkOrder, setDrinkOrder] = useState("");
 
@@ -48,7 +48,7 @@ function App() {
     setDrinkOrder(drink + "!");
   }
 
-  function testDrink() {
+  function textDrink() {
     const drink = getOrder("En ", size," ", text);
     setDrinkOrder(drink + "!");
   }
