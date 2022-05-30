@@ -4,7 +4,6 @@ import './App.css';
 function App() {
   document.title = "Grogginator";
 
-<<<<<<< HEAD
   const size = [4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 10, 10, 12];
   const color = ["röd", "gul", "grön", "blå", "svart", "rosa", "färglös"];
   const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk"];
@@ -22,9 +21,6 @@ function App() {
   const one_thing = thing.length;
 
   const total_comb = 5*(color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing);
-=======
-  const functions = [colorTaste, thingAdjective, skitDrink, textDrink, nobodyRemeber];
->>>>>>> ecbe80fbc8eb231fba98dc6b5d8b311e8dc987e9
 
   const [drinkOrder, setDrinkOrder] = useState("");
   const [probability, setProbability] = useState(0);
@@ -114,29 +110,7 @@ function App() {
   // 80 -> 100% (20%)
   const oneThing = () => setDrinkOrder(getOrder(thing, "!"));
 
-<<<<<<< HEAD
   const functions = [colorTaste, thingAdjective, skitDrink, textDrink, nobodyRemeber, oneThing];
-=======
-  function thingAdjective() {
-    const drink = getOrder("En ", size, " ", adjective, " ", thing);
-    setDrinkOrder(drink + "!");
-  }
-
-  function skitDrink() {
-    const drink = getOrder("En ", size, " skit", skit);
-    setDrinkOrder(drink + "!");
-  }
-
-  function textDrink() {
-    const drink = getOrder("En ", size," ", text);
-    setDrinkOrder(drink + "!");
-  }
-
-  function nobodyRemeber() {
-    const drink = getOrder("En ", size, " ingen minns en ", thing);
-    setDrinkOrder(drink + "!");
-  }
->>>>>>> ecbe80fbc8eb231fba98dc6b5d8b311e8dc987e9
 
   return (
     <div className="container">
