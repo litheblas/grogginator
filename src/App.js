@@ -1,20 +1,31 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import './App.css';
 
 function App() {
   document.title = "Grogginator";
-  
-  const size = [4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 10, 12];
-  const color = ["röd", "gul", "grön", "blå", "svart", "rosa", "färglös"];
-  const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig"];
-  const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen"];
-  const thing = ["golvfest", "krock", "stövel", "emulsion", "käftsmäll", "dansk", "fegis"];
-  const skit = ["god", "äcklig", "nasty", "vatten", "trevlig", "juice"];
-  const text = ["våga dö", "inget tjaffs", "fisk", "billig"];
 
-  const functions = [colorTaste, thingAdjective, skitDrink, testDrink, nobodyRemeber];
+  const size = [4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 10, 10, 12];
+  const color = ["röd", "gul", "grön", "blå", "svart", "rosa", "färglös"];
+  const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk"];
+  const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsin"];
+  const thing = ["golvfest", "emulsion", "käftsmäll", "dansk", "fegis", "sommar", "kökkenmödding"];
+  const skit = ["god", "äcklig", "nasty", "vatten", "trevlig", "juice", " på dig"];
+  const text = ["våga dö", "inget tjaffs", "fisk", "billig", "hondra prrocent", "swedish tequila",
+    "baren bestämmer", "du har blivit barstoppad! Ställ dig sist i kön"];
+
+  const color_taste = color.length * taste.length;
+  const thing_adjective = adjective.length * thing.length;
+  const skit_drink = skit.length;
+  const test_drink = text.length;
+  const nobody_remeber = thing.length;
+  const one_thing = thing.length;
+
+  const total_comb = 5*(color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing);
 
   const [drinkOrder, setDrinkOrder] = useState("");
+  const [probability, setProbability] = useState(0);
+  let sizeprob = 0;
+  
 
   function getOrder(...array) {
     let order = "";
@@ -25,43 +36,90 @@ function App() {
         order += array[Math.floor(Math.random() * array.length)];
       }
     })
-    return order;
+
+    const drinkSizeProb = getSizeAndProb();
+    sizeprob = drinkSizeProb[1];
+
+    return `En ${drinkSizeProb[0]}:a ` + order;
+  }
+
+  function getSizeAndProb() {
+    const drinksize = size[Math.floor(Math.random() * size.length)];
+    
+    // calculate size prob
+    if (drinksize === 4)
+      return [4,5/15]
+    else if (drinksize === 6)
+      return [6, 4/15]
+    else if (drinksize === 8)
+      return [8,3/15]
+    else if(drinksize === 10)
+      return [10,2/15]
+    else if(drinksize === 12)
+      return [12,1/15]
   }
 
   function callModel() {
-    const model = functions[Math.floor(Math.random() * functions.length)];
-    model();
+    const randnr = Math.random();
+    console.log("Random nr: ", randnr);
+    let probability = 0;
+
+    // Calls corresponding function for random number and calculates probability
+    if (0 <= randnr && randnr < 0.2) { // colorTaste
+      functions[0]();
+      probability = 0.2*1/(color.length * taste.length);
+
+    } else if (0.2 <= randnr && randnr < 0.4) { // thingAdjective
+      functions[1]();
+      probability = 0.2*1/(adjective.length * thing.length);
+
+    } else if (0.4 <= randnr && randnr < 0.55) { // skitDrink
+      functions[2]();
+      probability = 0.15*1/(skit.length);
+
+    } else if (0.55 <= randnr && randnr < 0.65) { // textDrink
+      functions[3]();
+      probability = 0.10*1/(text.length);
+
+    } else if (0.65 <= randnr && randnr < 0.8) { // nobodyRemeber
+      functions[4]();
+      probability = 0.15*1/(thing.length);
+
+    } else if (0.8 <= randnr && randnr <= 1) { // oneThing
+      functions[5]();
+      probability = 0.2*1/(thing.length);
+
+    } else {
+      functions[0]();
+      probability = 0.2*1/(color.length * taste.length);
+      console.log("Should not happen, colorTaste")
+    }
+    setProbability((probability*sizeprob*100).toFixed(2));
   }
 
-  function colorTaste() {
-    const drink = getOrder("En ", size, " ", color, " och ", taste);
-    setDrinkOrder(drink + "!");
-  }
+  // 0 -> 20%   (20%)
+  const colorTaste = () => setDrinkOrder(getOrder(color, " och ", taste, "!"));
+  // 20 -> 40%  (20%)
+  const thingAdjective = () => setDrinkOrder(getOrder(adjective, " ", thing, "!"));
+  // 40 -> 55%  (15%)
+  const skitDrink = () => setDrinkOrder(getOrder("skit", skit, "!"));
+  // 55 -> 65%  (10%)
+  const textDrink = () => setDrinkOrder(getOrder(text, "!"));
+  // 65 -> 80%  (15%)
+  const nobodyRemeber = () => setDrinkOrder(getOrder("ingen minns en ", thing, "!"));
+  // 80 -> 100% (20%)
+  const oneThing = () => setDrinkOrder(getOrder(thing, "!"));
 
-  function thingAdjective() {
-    const drink = getOrder("En ", size, " ", adjective, " ", thing);
-    setDrinkOrder(drink + "!");
-  }
-
-  function skitDrink() {
-    const drink = getOrder("En ", size, " skit", skit);
-    setDrinkOrder(drink + "!");
-  }
-
-  function testDrink() {
-    const drink = getOrder("En ", size," ", text);
-    setDrinkOrder(drink + "!");
-  }
-
-  function nobodyRemeber() {
-    const drink = getOrder("En ", size, " ingen minns en ", thing);
-    setDrinkOrder(drink + "!");
-  }
+  const functions = [colorTaste, thingAdjective, skitDrink, textDrink, nobodyRemeber, oneThing];
 
   return (
     <div className="container">
       <div className="top">
         {drinkOrder}
+        <div className='prob'>
+          <p>{probability ? `\nDrinksannolikhet: ${probability} %` : ""}</p>
+          Totalt {total_comb} olika drinkbeställningar!
+        </div>
       </div>
       <div className="bottom">
         <button onClick={() => callModel()}>Generera drink!</button>
