@@ -1,17 +1,19 @@
-import { useState } from 'react';
+import { useState, useTransition } from 'react';
 import './App.css';
 
 function App() {
   document.title = "Grogginator";
 
   const size = [4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 10, 10, 12];
+  const vågadösize = [16, 20, 24];
+
   const color = ["röd", "gul", "grön", "blå", "svart", "rosa", "färglös"];
-  const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk", "apelsin"];
-  const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsinig"];
+  const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk", "apelsin", "banan"];
+  const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsinig", "split"];
   const thing = ["golvfest", "emulsion", "käftsmäll", "dansk", "fegis", "sommar", "kökkenmödding"];
   const skit = ["god", "äcklig", "nasty", "vatten", "trevlig", "juice", " på dig"];
-  const text = ["våga dö", "inget tjaffs", "fisk", "billig", "hondra prrocent", "swedish tequila",
-    "baren bestämmer", "du har blivit barstoppad! Ställ dig sist i kön"];
+  const text = ["inget tjaffs", "fisk", "hondra prrocent", "swedish tequila",
+    "baren bestämmer", "gin och tonic", "du har blivit barstoppad! Ställ dig sist i kön"];
 
   const color_taste = color.length * taste.length;
   const thing_adjective = adjective.length * thing.length;
@@ -19,12 +21,14 @@ function App() {
   const test_drink = text.length;
   const nobody_remeber = thing.length;
   const one_thing = thing.length;
+  const våga_dö = vågadösize.length;
 
-  const total_comb = 5 * (color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing);
+  const total_comb = 5 * (color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing) + 3*våga_dö;
 
   const [drinkOrder, setDrinkOrder] = useState("");
   const [probability, setProbability] = useState(0);
   const [rarity, setRarity] = useState("");
+  const [rarityStyle, setRarityStyle] = useState("Common")
   let sizeprob = 0;
 
 
@@ -37,11 +41,23 @@ function App() {
         order += array[Math.floor(Math.random() * array.length)];
       }
     })
-
     const drinkSizeProb = getSizeAndProb();
     sizeprob = drinkSizeProb[1];
-
     return `En ${drinkSizeProb[0]}:a ` + order;
+  }
+
+  function vågaDögetOrder(...array) {
+    let order = "";
+    array.forEach(array => {
+      if (typeof array === 'string') {
+        order += array;
+      } else {
+        order += array[Math.floor(Math.random() * array.length)];
+      }
+    })
+    const drinkSize = vågadösize[Math.floor(Math.random() * vågadösize.length)];
+    sizeprob = 1/4;
+    return `En ${drinkSize}:a ` + order;
   }
 
   function getSizeAndProb() {
@@ -62,90 +78,89 @@ function App() {
 
   function callModel() {
     const randnr = Math.random();
-    //console.log("Random nr: ", randnr);
-    let probability = 0;
+    let prob = 0;
 
     // Calls corresponding function for random number and calculates probability
-    if (0 <= randnr && randnr < 0.2) { // colorTaste
+    if (0 <= randnr && randnr < 0.35) { // colorTaste
       functions[0]();
-      probability = 0.2 * 1 / (color.length * taste.length);
+      prob = 0.35 * 1 / (color.length * taste.length);
+      setRarity("Everywhere")
+      setRarityStyle("Everywhere")
 
-    } else if (0.2 <= randnr && randnr < 0.4) { // thingAdjective
+    } else if (0.35 <= randnr && randnr < 0.6) { // thingAdjective
       functions[1]();
-      probability = 0.2 * 1 / (adjective.length * thing.length);
+      prob = 0.25 * 1 / (adjective.length * thing.length);
+      setRarity("Common")
+      setRarityStyle("Common")
 
-    } else if (0.4 <= randnr && randnr < 0.55) { // skitDrink
+    } else if (0.6 <= randnr && randnr < 0.8) { // skitDrink
       functions[2]();
-      probability = 0.15 * 1 / (skit.length);
+      prob = 0.2 * 1 / (thing.length);
+      setRarity("Uncommon")
+      setRarityStyle("Uncommon")
 
-    } else if (0.55 <= randnr && randnr < 0.65) { // textDrink
+    } else if (0.8 <= randnr && randnr < 0.9) { // textDrink
       functions[3]();
-      probability = 0.10 * 1 / (text.length);
+      prob = 0.1 * 1 / (skit.length);
+      setRarity("Very Uncommon")
+      setRarityStyle("VeryUncommon")
 
-    } else if (0.65 <= randnr && randnr < 0.8) { // nobodyRemeber
+    } else if (0.9 <= randnr && randnr < 0.96) { // nobodyRemeber
       functions[4]();
-      probability = 0.15 * 1 / (thing.length);
+      prob = 0.06 * 1 / (thing.length);
+      setRarity("Rare")
+      setRarityStyle("Rare")
 
-    } else if (0.8 <= randnr && randnr <= 1) { // oneThing
+    } else if (0.96 <= randnr && randnr < 0.99) { // oneThing
       functions[5]();
-      probability = 0.2 * 1 / (thing.length);
-
+      prob = 0.03 * 1 / (text.length);
+      setRarity("Epic")
+      setRarityStyle("Epic")
+    
+    } else if (0.99 <= randnr && randnr <= 1) {
+      functions[6]();
+      prob = 0.01 * 1 / vågadösize.length;
+      setRarity("LEGENDARY")
+      setRarityStyle("Legendary blinking")
+    
     } else {
       functions[0]();
-      probability = 0.2 * 1 / (color.length * taste.length);
-      //console.log("Should not happen, colorTaste")
+      prob = 0.35 * 1 / (color.length * taste.length);
+      setRarity("Common")
+      setRarityStyle("Common")
+      console.log("Should not happen, colorTaste")
     }
-    const prob = probability * sizeprob * 100;
-    calculateRarity(prob)
+    prob = prob * sizeprob * 100;
     setProbability(prob.toFixed(2));
     return (prob)
   }
 
-  function calculateRarity(prob) {
-    if(prob > 0.2)
-      setRarity("Common")
-    else if(prob > 0.08)
-      setRarity("Rare")
-    else if(prob > 0.04)
-      setRarity("Epic")
-    else if(prob > 0)
-      setRarity("Legendary")
-    else
-      setRarity("Common")
-  }
-
-  // 0 -> 20%   (20%)
+  // 0 -> 35%   (35%)
   const colorTaste = () => setDrinkOrder(getOrder(color, " och ", taste, "!"));
-  // 20 -> 40%  (20%)
+  // 35 -> 60%  (25%)
   const thingAdjective = () => setDrinkOrder(getOrder(adjective, " ", thing, "!"));
-  // 40 -> 55%  (15%)
-  const skitDrink = () => setDrinkOrder(getOrder("skit", skit, "!"));
-  // 55 -> 65%  (10%)
-  const textDrink = () => setDrinkOrder(getOrder(text, "!"));
-  // 65 -> 80%  (15%)
-  const nobodyRemeber = () => setDrinkOrder(getOrder("ingen minns en ", thing, "!"));
-  // 80 -> 100% (20%)
+  // 60 -> 80% (20%)
   const oneThing = () => setDrinkOrder(getOrder(thing, "!"));
+  // 80 -> 90%  (10%)
+  const skitDrink = () => setDrinkOrder(getOrder("skit", skit, "!"));
+  // 90 -> 96%  (6%)
+  const nobodyRemeber = () => setDrinkOrder(getOrder("ingen minns en ", thing, "!"));
+  // 96 -> 99%  (3%)
+  const textDrink = () => setDrinkOrder(getOrder(text, "!"));
+  // 99 -> 100% (1%)
+  const vågaDö = () => setDrinkOrder(vågaDögetOrder("våga dö!"))
 
-  const functions = [colorTaste, thingAdjective, skitDrink, textDrink, nobodyRemeber, oneThing];
 
-  function manyRuns() {
-    let probarray = [];
-    for (let index = 0; index < 100000; index++) {
-      probarray.push(callModel());
-    }
-    console.log("Max: ", Math.max(...probarray))
-    console.log("Max: ", Math.min(...probarray))
-    console.log(probarray)
-  }
+  const functions = [colorTaste, thingAdjective, oneThing, skitDrink, nobodyRemeber, textDrink, vågaDö];
 
   return (
     <div className="container">
       <div className="top">
-        {drinkOrder}
-        <div className='prob'>
-          <p>{probability ? `\nDrinksannolikhet: ${probability} %` : ""} {rarity}</p>
-          Totalt {total_comb} olika drinkbeställningar!
+        <p>{drinkOrder}</p>
+        <div className='stats'>
+          <p className={`${rarityStyle}`}>{rarity}</p>
+          <p style={{"fontSize":25}}>{probability ? `\nDrinksannolikhet: ${probability} %` : ""}</p>
+          Det finns {total_comb} olika drinkbeställningar!
         </div>
       </div>
       <div className="bottom">
