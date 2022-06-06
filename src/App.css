@@ -76,15 +76,39 @@
   color: #f24aff;
   font-size: 50px;
 }
+
+.epicAnim {
+  animation: blinkingEpic 1.2s infinite;
+}
+
 .Legendary {
   color: #ffbf17;
   font-size: 60px;
 }
 
-.blinking{
-  animation:blinkingText 1.2s infinite;
+.legendAnim {
+  animation: spin 5s infinite, blinkingLegend 1.2s infinite;
+  animation-timing-function: linear;
 }
-@keyframes blinkingText{
+
+@keyframes spin {
+    from {
+        transform:rotate(0deg);
+    }
+    to {
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes blinkingEpic{
+  0%{     color: #f24aff;    }
+  49%{    color: #f24aff; }
+  60%{    color: transparent; }
+  99%{    color:transparent;  }
+  100%{   color: #f24aff;    }
+}
+
+@keyframes blinkingLegend{
   0%{     color: #ffbf17;    }
   49%{    color: #ffbf17; }
   60%{    color: transparent; }
