@@ -20,18 +20,22 @@ export default function GenerateDrink() {
 
   // Check if user reloaded page and restore timer
   useEffect(() => {
-    const savedDate = getLocalStorageValue("end_date");
-    if (savedDate != null && !isNaN(savedDate)) {
+    console.log("useEffect")
+    const futureDate = getLocalStorageValue("end_date");
+    if (futureDate != null && !isNaN(futureDate)) {
+      console.log("time exists")
       const currentTime = Date.now();
-      const delta = parseInt(savedDate, 10) - currentTime;
+      const delta = parseInt(futureDate, 10) - currentTime;
 
       //Do you reach the end?
       if (delta > wantedDelay) {
         //Yes we clear our saved end date
+        console.log("Clear time")
         if (localStorage.getItem("end_date").length > 0)
           localStorage.removeItem("end_date");
       } else {
         //No update the end date  
+        console.log("Update time")
         setDate({ date: currentTime, delay: delta });
       }
     }
@@ -43,7 +47,7 @@ export default function GenerateDrink() {
       // Render a completed state
       return (
         <div className="bottom">
-          <button onClick={() => { callModel(); setDate({ date: Date.now(), delay: wantedDelay }) }}>Generera drink!</button>
+          <button onClick={() => {localStorage.removeItem("end_date"); callModel(); setDate({ date: Date.now(), delay: wantedDelay }) }}>Generera drink!</button>
         </div>
       )
     } else {
@@ -192,8 +196,9 @@ export default function GenerateDrink() {
         date={date.date + date.delay}
         renderer={Timer}
         key={date.date}
-        onStart={(delta) => {
+        onStart={() => {
           //Save the end date
+          console.log("onStart: ");
           if (localStorage.getItem("end_date") == null)
             localStorage.setItem(
               "end_date",
