@@ -26,16 +26,17 @@ export default function GenerateDrink() {
       console.log("time exists")
       const currentTime = Date.now();
       const delta = parseInt(futureDate, 10) - currentTime;
-
       //Do you reach the end?
       if (delta > wantedDelay) {
         //Yes we clear our saved end date
-        console.log("Clear time")
         if (localStorage.getItem("end_date").length > 0)
           localStorage.removeItem("end_date");
       } else {
         //No update the end date  
         console.log("Update time")
+        setDrinkOrder("Du kan inte spamma fram drinkar!")
+        setRarity("Fuskare")
+        setRarityStyle("Common")
         setDate({ date: currentTime, delay: delta });
       }
     }
