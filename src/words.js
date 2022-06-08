@@ -1,13 +1,14 @@
 const size = [4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 10, 10, 12];
 const vågadösize = [16, 20, 24];
 
-const color = ["röd", "gul", "grön", "blå", "svart", "rosa", "färglös"];
-const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk", "apelsin", "banan"];
-const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsinig", "split"];
-const thing = ["golvfest", "emulsion", "käftsmäll", "dansk", "fegis", "sommar", "kökkenmödding"];
-const skit = ["god", "äcklig", "nasty", "vatten", "trevlig", "juice", " på dig"];
-const text = ["inget tjaffs", "fisk", "hondra prrocent", "swedish tequila",
-  "baren bestämmer", "gin och tonic", "du har blivit barstoppad! Ställ dig sist i kön"];
+const color = ["röd", "orange", "azur", "gul", "grön", "blå", "svart", "rosa", "färglös"];
+const taste = ["smarrig", "god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk", "apelsin", "banan", "kall", "varm", "stark", "het"];
+const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsinig", "adekvat", "frisk"];
+const thing = ["finsk", "va han från Polen?", "golvfest", "emulsion", "käftsmäll", "dansk", "fegis", "sommar", "kökkenmödding",
+              "split", "Finspångsmys", "Finspångare", "finlandsfärja", "Amy Diamond", "Lasse Kronér"];
+const skit = ["god", "trevlig", "nasty", "vatten", "smart", "juice", "bag"," på dig"];
+const text = ["Intendents m/41", "Tillton stout", "bag", "Ågänget dirty fantasy no homo","inget tjaffs", "fisk", "hondra prrocent", "swedish tequila",
+  "baren bestämmer", "gin och tonic", "du har blivit barstoppad! Ställ dig sist i kön", "UNO reverse card"];
 
 const color_taste = color.length * taste.length;
 const thing_adjective = adjective.length * thing.length;
@@ -17,7 +18,7 @@ const nobody_remeber = thing.length;
 const one_thing = thing.length;
 const våga_dö = vågadösize.length;
 
-const total_comb = 5 * (color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing) + 3 * våga_dö;
+const total_comb = 5 * (color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing) + våga_dö;
 
 export const constClass = {
   size: size,

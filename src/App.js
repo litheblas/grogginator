@@ -6,9 +6,9 @@ import CountDown from 'react-countdown';
 
 
 export default function GenerateDrink() {
-
+  
   let sizeprob = 0;
-  const wantedDelay = 5000;
+  const wantedDelay = 180000; // 3 min
   const [drinkOrder, setDrinkOrder] = useState("");
   const [probability, setProbability] = useState(0);
   const [rarity, setRarity] = useState("");
@@ -18,7 +18,7 @@ export default function GenerateDrink() {
   const getLocalStorageValue = (s) => localStorage.getItem(s);
 
 
-  // Check if 
+  // Check if user reloaded page and restore timer
   useEffect(() => {
     const savedDate = getLocalStorageValue("end_date");
     if (savedDate != null && !isNaN(savedDate)) {
@@ -50,7 +50,7 @@ export default function GenerateDrink() {
       // Render a countdown
       return (
         <div className="bottom">
-          <p>Var vänlig vänta {minutes}:{seconds} på nästa drink!</p>
+          <p>Var vänlig vänta {minutes}:{seconds} min på nästa drink!</p>
         </div>
       )
     }
@@ -106,21 +106,21 @@ export default function GenerateDrink() {
     let prob = 0;
 
     // Calls corresponding function for random number and calculates probability
-    if (0 <= randnr && randnr < 0.35) { // colorTaste
+    if (0 <= randnr && randnr < 0.30) { // colorTaste
       functions[0]();
-      prob = 0.35 * 1 / (cons.color.length * cons.taste.length);
+      prob = 0.30 * 1 / (cons.color.length * cons.taste.length);
       setRarity("Everywhere")
       setRarityStyle("Everywhere")
 
-    } else if (0.35 <= randnr && randnr < 0.6) { // thingAdjective
+    } else if (0.30 <= randnr && randnr < 0.55) { // thingAdjective
       functions[1]();
       prob = 0.25 * 1 / (cons.adjective.length * cons.thing.length);
       setRarity("Common")
       setRarityStyle("Common")
 
-    } else if (0.6 <= randnr && randnr < 0.8) { // skitDrink
+    } else if (0.55 <= randnr && randnr < 0.8) { // skitDrink
       functions[2]();
-      prob = 0.2 * 1 / (cons.thing.length);
+      prob = 0.25 * 1 / (cons.thing.length);
       setRarity("Uncommon")
       setRarityStyle("Uncommon")
 
@@ -140,14 +140,14 @@ export default function GenerateDrink() {
       functions[5]();
       prob = 0.03 * 1 / (cons.text.length);
       setRarity("Epic")
-      setRarityStyle("Epic")
-
+      setRarityStyle("Epic epicAnim")
+    
     } else if (0.99 <= randnr && randnr <= 1) {
       functions[6]();
       prob = 0.01 * 1 / cons.vågadösize.length;
       setRarity("LEGENDARY")
-      setRarityStyle("Legendary blinking")
-
+      setRarityStyle("Legendary legendAnim")
+    
     } else {
       functions[0]();
       prob = 0.35 * 1 / (cons.color.length * cons.taste.length);
@@ -160,11 +160,11 @@ export default function GenerateDrink() {
     return (prob)
   }
 
-  // 0 -> 35%   (35%)
+  // 0 -> 30%   (30%)
   const colorTaste = () => setDrinkOrder(getOrder(cons.color, " och ", cons.taste, "!"));
-  // 35 -> 60%  (25%)
+  // 30 -> 55%  (25%)
   const thingAdjective = () => setDrinkOrder(getOrder(cons.adjective, " ", cons.thing, "!"));
-  // 60 -> 80% (20%)
+  // 55 -> 80% (25%)
   const oneThing = () => setDrinkOrder(getOrder(cons.thing, "!"));
   // 80 -> 90%  (10%)
   const skitDrink = () => setDrinkOrder(getOrder("skit", cons.skit, "!"));
@@ -184,8 +184,8 @@ export default function GenerateDrink() {
         <p>{drinkOrder}</p>
         <div className='stats'>
           <p className={`${rarityStyle}`}>{rarity}</p>
-          <p style={{ "fontSize": 25 }}>{probability ? `\nDrinksannolikhet: ${probability} %` : ""}</p>
-          Det finns {cons.total_comb} olika drinkbeställningar!
+          <p style={{"fontSize":25}}>{probability ? `\nDrinksannolikhet: ${probability} %` : ""}</p>
+          Det finns {cons.total_comb} olika beställningar!
         </div>
       </div>
       <CountDown
