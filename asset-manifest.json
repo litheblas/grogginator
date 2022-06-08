@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/grogginator/static/css/main.5ea82afc.css",
-    "main.js": "/grogginator/static/js/main.acc16f29.js",
-    "static/js/787.e8a64a6b.chunk.js": "/grogginator/static/js/787.e8a64a6b.chunk.js",
-    "index.html": "/grogginator/index.html",
-    "main.5ea82afc.css.map": "/grogginator/static/css/main.5ea82afc.css.map",
-    "main.acc16f29.js.map": "/grogginator/static/js/main.acc16f29.js.map",
-    "787.e8a64a6b.chunk.js.map": "/grogginator/static/js/787.e8a64a6b.chunk.js.map"
+    "main.css": "/static/css/main.5ea82afc.css",
+    "main.js": "/static/js/main.491b696d.js",
+    "static/js/787.e8a64a6b.chunk.js": "/static/js/787.e8a64a6b.chunk.js",
+    "index.html": "/index.html",
+    "main.5ea82afc.css.map": "/static/css/main.5ea82afc.css.map",
+    "main.491b696d.js.map": "/static/js/main.491b696d.js.map",
+    "787.e8a64a6b.chunk.js.map": "/static/js/787.e8a64a6b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.5ea82afc.css",
-    "static/js/main.acc16f29.js"
+    "static/js/main.491b696d.js"
   ]
 }
