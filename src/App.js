@@ -1,35 +1,60 @@
-import { useState, useTransition } from 'react';
 import './App.css';
+import React, { useEffect } from 'react';
+import { useState } from 'react';
+import { constClass as cons } from './words';
+import CountDown from 'react-countdown';
 
-function App() {
-  document.title = "Grogginator";
 
-  const size = [4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 10, 10, 12];
-  const vågadösize = [16, 20, 24];
+export default function GenerateDrink() {
 
-  const color = ["röd", "gul", "grön", "blå", "svart", "rosa", "färglös"];
-  const taste = ["god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk", "apelsin", "banan"];
-  const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsinig", "split"];
-  const thing = ["golvfest", "emulsion", "käftsmäll", "dansk", "fegis", "sommar", "kökkenmödding"];
-  const skit = ["god", "äcklig", "nasty", "vatten", "trevlig", "juice", " på dig"];
-  const text = ["inget tjaffs", "fisk", "hondra prrocent", "swedish tequila",
-    "baren bestämmer", "gin och tonic", "du har blivit barstoppad! Ställ dig sist i kön"];
-
-  const color_taste = color.length * taste.length;
-  const thing_adjective = adjective.length * thing.length;
-  const skit_drink = skit.length;
-  const test_drink = text.length;
-  const nobody_remeber = thing.length;
-  const one_thing = thing.length;
-  const våga_dö = vågadösize.length;
-
-  const total_comb = 5 * (color_taste + thing_adjective + skit_drink + test_drink + nobody_remeber + one_thing) + 3*våga_dö;
-
+  let sizeprob = 0;
+  const wantedDelay = 5000;
   const [drinkOrder, setDrinkOrder] = useState("");
   const [probability, setProbability] = useState(0);
   const [rarity, setRarity] = useState("");
   const [rarityStyle, setRarityStyle] = useState("Common")
-  let sizeprob = 0;
+  const [date, setDate] = useState({ date: Date.now(), delay: 0 });
+
+  const getLocalStorageValue = (s) => localStorage.getItem(s);
+
+
+  // Check if 
+  useEffect(() => {
+    const savedDate = getLocalStorageValue("end_date");
+    if (savedDate != null && !isNaN(savedDate)) {
+      const currentTime = Date.now();
+      const delta = parseInt(savedDate, 10) - currentTime;
+
+      //Do you reach the end?
+      if (delta > wantedDelay) {
+        //Yes we clear our saved end date
+        if (localStorage.getItem("end_date").length > 0)
+          localStorage.removeItem("end_date");
+      } else {
+        //No update the end date  
+        setDate({ date: currentTime, delay: delta });
+      }
+    }
+  }, []);
+
+
+  const Timer = ({ minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return (
+        <div className="bottom">
+          <button onClick={() => { callModel(); setDate({ date: Date.now(), delay: wantedDelay }) }}>Generera drink!</button>
+        </div>
+      )
+    } else {
+      // Render a countdown
+      return (
+        <div className="bottom">
+          <p>Var vänlig vänta {minutes}:{seconds} på nästa drink!</p>
+        </div>
+      )
+    }
+  };
 
 
   function getOrder(...array) {
@@ -55,13 +80,13 @@ function App() {
         order += array[Math.floor(Math.random() * array.length)];
       }
     })
-    const drinkSize = vågadösize[Math.floor(Math.random() * vågadösize.length)];
-    sizeprob = 1/4;
+    const drinkSize = cons.vågadösize[Math.floor(Math.random() * cons.vågadösize.length)];
+    sizeprob = 1 / 4;
     return `En ${drinkSize}:a ` + order;
   }
 
   function getSizeAndProb() {
-    const drinksize = size[Math.floor(Math.random() * size.length)];
+    const drinksize = cons.size[Math.floor(Math.random() * cons.size.length)];
 
     // calculate size prob
     if (drinksize === 4)
@@ -76,77 +101,77 @@ function App() {
       return [12, 1 / 15]
   }
 
-  function callModel() {
+  const callModel = () => {
     const randnr = Math.random();
     let prob = 0;
 
     // Calls corresponding function for random number and calculates probability
     if (0 <= randnr && randnr < 0.35) { // colorTaste
       functions[0]();
-      prob = 0.35 * 1 / (color.length * taste.length);
+      prob = 0.35 * 1 / (cons.color.length * cons.taste.length);
       setRarity("Everywhere")
       setRarityStyle("Everywhere")
 
     } else if (0.35 <= randnr && randnr < 0.6) { // thingAdjective
       functions[1]();
-      prob = 0.25 * 1 / (adjective.length * thing.length);
+      prob = 0.25 * 1 / (cons.adjective.length * cons.thing.length);
       setRarity("Common")
       setRarityStyle("Common")
 
     } else if (0.6 <= randnr && randnr < 0.8) { // skitDrink
       functions[2]();
-      prob = 0.2 * 1 / (thing.length);
+      prob = 0.2 * 1 / (cons.thing.length);
       setRarity("Uncommon")
       setRarityStyle("Uncommon")
 
     } else if (0.8 <= randnr && randnr < 0.9) { // textDrink
       functions[3]();
-      prob = 0.1 * 1 / (skit.length);
+      prob = 0.1 * 1 / (cons.skit.length);
       setRarity("Very Uncommon")
       setRarityStyle("VeryUncommon")
 
     } else if (0.9 <= randnr && randnr < 0.96) { // nobodyRemeber
       functions[4]();
-      prob = 0.06 * 1 / (thing.length);
+      prob = 0.06 * 1 / (cons.thing.length);
       setRarity("Rare")
       setRarityStyle("Rare")
 
     } else if (0.96 <= randnr && randnr < 0.99) { // oneThing
       functions[5]();
-      prob = 0.03 * 1 / (text.length);
+      prob = 0.03 * 1 / (cons.text.length);
       setRarity("Epic")
       setRarityStyle("Epic")
-    
+
     } else if (0.99 <= randnr && randnr <= 1) {
       functions[6]();
-      prob = 0.01 * 1 / vågadösize.length;
+      prob = 0.01 * 1 / cons.vågadösize.length;
       setRarity("LEGENDARY")
       setRarityStyle("Legendary blinking")
-    
+
     } else {
       functions[0]();
-      prob = 0.35 * 1 / (color.length * taste.length);
+      prob = 0.35 * 1 / (cons.color.length * cons.taste.length);
       setRarity("Common")
       setRarityStyle("Common")
       console.log("Should not happen, colorTaste")
     }
     prob = prob * sizeprob * 100;
-    setProbability(prob.toFixed(2));
+    setProbability(prob.toFixed(3)); // set percentage decimals
     return (prob)
   }
 
   // 0 -> 35%   (35%)
-  const colorTaste = () => setDrinkOrder(getOrder(color, " och ", taste, "!"));
+  const colorTaste = () => setDrinkOrder(getOrder(cons.color, " och ", cons.taste, "!"));
   // 35 -> 60%  (25%)
-  const thingAdjective = () => setDrinkOrder(getOrder(adjective, " ", thing, "!"));
+  const thingAdjective = () => setDrinkOrder(getOrder(cons.adjective, " ", cons.thing, "!"));
   // 60 -> 80% (20%)
-  const oneThing = () => setDrinkOrder(getOrder(thing, "!"));
+  const oneThing = () => setDrinkOrder(getOrder(cons.thing, "!"));
   // 80 -> 90%  (10%)
-  const skitDrink = () => setDrinkOrder(getOrder("skit", skit, "!"));
+  const skitDrink = () => setDrinkOrder(getOrder("skit", cons.skit, "!"));
   // 90 -> 96%  (6%)
-  const nobodyRemeber = () => setDrinkOrder(getOrder("ingen minns en ", thing, "!"));
+  const nobodyRemeber = () => setDrinkOrder(getOrder("ingen minns en ", cons.thing, "!"));
   // 96 -> 99%  (3%)
-  const textDrink = () => setDrinkOrder(getOrder(text, "!"));
+  const textDrink = () => setDrinkOrder(getOrder(cons.text, "!"));
   // 99 -> 100% (1%)
   const vågaDö = () => setDrinkOrder(vågaDögetOrder("våga dö!"))
 
@@ -159,15 +184,28 @@ function App() {
         <p>{drinkOrder}</p>
         <div className='stats'>
           <p className={`${rarityStyle}`}>{rarity}</p>
-          <p style={{"fontSize":25}}>{probability ? `\nDrinksannolikhet: ${probability} %` : ""}</p>
-          Det finns {total_comb} olika drinkbeställningar!
+          <p style={{ "fontSize": 25 }}>{probability ? `\nDrinksannolikhet: ${probability} %` : ""}</p>
+          Det finns {cons.total_comb} olika drinkbeställningar!
         </div>
       </div>
-      <div className="bottom">
-        <button onClick={() => callModel()}>Generera drink!</button>
-      </div>
+      <CountDown
+        date={date.date + date.delay}
+        renderer={Timer}
+        key={date.date}
+        onStart={(delta) => {
+          //Save the end date
+          if (localStorage.getItem("end_date") == null)
+            localStorage.setItem(
+              "end_date",
+              JSON.stringify(date.date + date.delay)
+            );
+        }}
+        onComplete={() => {
+          if (localStorage.getItem("end_date") != null)
+            localStorage.removeItem("end_date");
+        }}
+      />
     </div>
   );
 }
 
-export default App;
