@@ -1,16 +1,16 @@
 const size = [4, 4, 4, 4, 4, 6, 6, 6, 6, 8, 8, 8, 10, 10, 12];
 const vågadösize = [16, 20, 24];
 
-const color = ["brun","röd", "orange", "azur", "gul", "grön", "blå", "svart", "rosa", "färglös", "trombongul"];
+const color = ["brun", "röd", "orange", "azur", "gul", "grön", "blå", "svart", "rosa", "färglös", "trombongul"];
 const taste = ["smarrig", "god", "fruktig", "mjuk", "besk", "söt", "äcklig", "frisk", "tropisk", "apelsin",
-              "banan", "kall", "varm", "stark", "het", "tjock", "lakrits"];
-const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "heterogen", "homogen", "apelsinig", "adekvat",
+              "banan", "kall", "varm", "stark", "tjock", "lakrits"];
+const adjective = ["skön", "trevlig", "busig", "spännande", "dansk", "homogen", "apelsinig", "adekvat",
                   "frisk", "bussshaffis skön", "tigrig"];
 const thing = ["finsk", "golvfest", "emulsion", "käftsmäll", "dansk", "fegis", "sommar",
-              "kökkenmödding", "split", "Finspångsmys", "Finspångare", "finlandsfärja", "Amy Diamond", "Lasse Kronér",
-              "dalahäst", "fika", "flodhäst", "Bibbi", "köra bil", "tentatant", "tourmage"];
-const skit = ["god", "trevlig", "nasty", "vatten", "smart", "juice", "bag"," på dig"];
-const text = ["Intendents m/41", "Tillton stout", "bag", "Ågänget dirty fantasy no homo", "inget tjaffs", "fisk",
+              "kökkenmödding", "Finspångsmys", "finlandsfärja", "Amy Diamond", "Lasse Kronér",
+              "manskörsrep", "fika", "flodhäst", "Bibbi", "tentatant", "tourmage"];
+const skit = ["god", "trevlig", "nasty", "vatten", "smart", "juice", "bag"," på dig", "kall"];
+const text = ["intendentens m/41", "Tillton stout", "bag", "Ågänget dirty fantasy no homo", "inget tjaffs", "fisk",
               "hondra procent", "swedish tequila", "BarenBaren bestämmer", "gin och tonic",
               "du har blivit barstoppad! Ställ dig sist i kön", "UNO reverse card", "va han från Polen?"];
 
